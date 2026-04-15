@@ -12,6 +12,12 @@ public class Event {
     private int capacity;
     private int createdBy;
     private Timestamp createdAt;
+    private String status;
+    private int seatsRemaining;
+
+    private String departmentClub;
+    private String category;
+    private String eventType;
 
     public Event() {
     }
@@ -78,5 +84,45 @@ public class Event {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getSeatsRemaining() {
+        return seatsRemaining;
+    }
+
+    public void setSeatsRemaining(int seatsRemaining) {
+        this.seatsRemaining = seatsRemaining;
+    }
+
+    public String getDepartmentClub() {
+        return departmentClub;
+    }
+
+    public void setDepartmentClub(String departmentClub) {
+        this.departmentClub = departmentClub;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
 }

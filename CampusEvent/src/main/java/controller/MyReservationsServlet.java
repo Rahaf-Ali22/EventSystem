@@ -19,6 +19,12 @@ public class MyReservationsServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
         User user = (User) session.getAttribute("loggedInUser");
 
         if (user == null) {

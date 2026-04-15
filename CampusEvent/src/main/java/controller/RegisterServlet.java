@@ -5,9 +5,7 @@ import model.User;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
@@ -24,23 +22,41 @@ public class RegisterServlet extends HttpServlet {
             String password = request.getParameter("password");
             String faculty = request.getParameter("faculty");
             String department = request.getParameter("department");
-            int admissionYear = Integer.parseInt(request.getParameter("admissionYear"));
-            String role = request.getParameter("role");
+            String admissionYearStr = request.getParameter("admission_year");
 
-            User user = new User(name, email, password, faculty, department, admissionYear, role);
+            if (name == null || email == null || password == null ||
+                faculty == null || department == null || admissionYearStr == null ||
+                name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+
+                response.sendRedirect("register.jsp?error=All fields are required");
+                return;
+            }
+
+            int admissionYear = Integer.parseInt(admissionYearStr);
+
+            User user = new User();
+            user.setName(name);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setFaculty(faculty);
+            user.setDepartment(department);
+            user.setAdmissionYear(admissionYear);
+
+            // 🔥 مهم: تحديد role
+            user.setRole("student");
 
             UserDAO userDAO = new UserDAO();
-            boolean success = userDAO.registerUser(user);
+            boolean isRegistered = userDAO.registerUser(user);
 
-            if (success) {
-                response.getWriter().println("User registered successfully!");
+            if (isRegistered) {
+                response.sendRedirect("login.jsp?success=Account Created Successfully");
             } else {
-                response.getWriter().println("Registration failed from DAO.");
+                response.sendRedirect("register.jsp?error=Registration Failed");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.getWriter().println("Registration failed: " + e.getMessage());
+            response.sendRedirect("register.jsp?error=Server Error");
         }
     }
 }

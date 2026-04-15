@@ -47,3 +47,24 @@ VALUES
 ('AI Workshop', 'Intro to AI', '2026-05-10', 'Hall A', 50, 1),
 ('Cybersecurity Seminar', 'Security basics', '2026-05-15', 'Room B', 40, 1),
 ('Web Dev Bootcamp', 'Frontend & Backend', '2026-05-20', 'Lab 3', 30, 1);
+
+-- Departments Table
+CREATE TABLE departments (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- Categories Table
+CREATE TABLE categories (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- Sample Data
+INSERT INTO departments (name) VALUES
+('Software Engineering'),
+('Computer Science');
+
+INSERT INTO categories (name) VALUES
+('Educational'),
+('Sports');

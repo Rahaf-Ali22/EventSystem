@@ -6,33 +6,60 @@ import util.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationDAO {
 
     public boolean createReservation(int userId, int eventId) {
+        String insertSql = "INSERT INTO reservations (user_id, event_id) VALUES (?, ?)";
+        String updateSeatsSql = "UPDATE events SET seats_remaining = seats_remaining - 1 WHERE id = ? AND seats_remaining > 0";
 
-        String sql = "INSERT INTO reservations (user_id, event_id) VALUES (?, ?)";
+        Connection conn = null;
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try {
+            conn = DBConnection.getConnection();
+            conn.setAutoCommit(false);
 
-            stmt.setInt(1, userId);
-            stmt.setInt(2, eventId);
+            try (PreparedStatement updateStmt = conn.prepareStatement(updateSeatsSql)) {
+                updateStmt.setInt(1, eventId);
+                int rowsUpdated = updateStmt.executeUpdate();
 
-            int rows = stmt.executeUpdate();
+                if (rowsUpdated == 0) {
+                    conn.rollback();
+                    return false;
+                }
+            }
 
-            return rows > 0;
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+                insertStmt.setInt(1, userId);
+                insertStmt.setInt(2, eventId);
+                insertStmt.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
 
         } catch (Exception e) {
+            try {
+                if (conn != null) conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
             return false;
+
+        } finally {
+            try {
+                if (conn != null) conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-    
-    public boolean isAlreadyReserved(int userId, int eventId) {
 
+    public boolean isAlreadyReserved(int userId, int eventId) {
         String sql = "SELECT * FROM reservations WHERE user_id = ? AND event_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
@@ -42,7 +69,6 @@ public class ReservationDAO {
             stmt.setInt(2, eventId);
 
             ResultSet rs = stmt.executeQuery();
-
             return rs.next();
 
         } catch (Exception e) {
@@ -52,39 +78,105 @@ public class ReservationDAO {
     }
 
     public boolean cancelReservation(int userId, int eventId) {
+        String deleteSql = "DELETE FROM reservations WHERE user_id = ? AND event_id = ?";
+        String updateSeatsSql = "UPDATE events SET seats_remaining = seats_remaining + 1 WHERE id = ?";
 
-        String sql = "DELETE FROM reservations WHERE user_id = ? AND event_id = ?";
+        Connection conn = null;
+
+        try {
+            conn = DBConnection.getConnection();
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
+                deleteStmt.setInt(1, userId);
+                deleteStmt.setInt(2, eventId);
+
+                int rowsDeleted = deleteStmt.executeUpdate();
+
+                if (rowsDeleted == 0) {
+                    conn.rollback();
+                    return false;
+                }
+            }
+
+            try (PreparedStatement updateStmt = conn.prepareStatement(updateSeatsSql)) {
+                updateStmt.setInt(1, eventId);
+                updateStmt.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
+
+        } catch (Exception e) {
+            try {
+                if (conn != null) conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+            return false;
+
+        } finally {
+            try {
+                if (conn != null) conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+ // Check if event has reservations
+    public boolean eventHasReservations(int eventId) {
+        String sql = "SELECT COUNT(*) FROM reservations WHERE event_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, eventId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    // Check if user has reservations
+    public boolean userHasReservations(int userId) {
+        String sql = "SELECT COUNT(*) FROM reservations WHERE user_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, userId);
-            stmt.setInt(2, eventId);
+            ResultSet rs = stmt.executeQuery();
 
-            int rows = stmt.executeUpdate();
-
-            return rows > 0;
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
-    }
-    
-    public List<Event> getUserReservations(int userId) {
 
+        return false;
+    }
+    public List<Event> getUserReservations(int userId) {
         List<Event> reservedEvents = new ArrayList<>();
 
         String sql = "SELECT e.* FROM reservations r " +
                      "JOIN events e ON r.event_id = e.id " +
                      "WHERE r.user_id = ? " +
-                     "ORDER BY r.reservation_date DESC";
+                     "ORDER BY r.id DESC";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, userId);
-
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -98,6 +190,11 @@ public class ReservationDAO {
                 event.setCapacity(rs.getInt("capacity"));
                 event.setCreatedBy(rs.getInt("created_by"));
                 event.setCreatedAt(rs.getTimestamp("created_at"));
+                event.setStatus(rs.getString("status"));
+                event.setSeatsRemaining(rs.getInt("seats_remaining"));
+                event.setDepartmentClub(rs.getString("department_club"));
+                event.setCategory(rs.getString("category"));
+                event.setEventType(rs.getString("event_type"));
 
                 reservedEvents.add(event);
             }
@@ -107,5 +204,26 @@ public class ReservationDAO {
         }
 
         return reservedEvents;
+    }
+
+    // ✅ عدد حجوزات المستخدم
+    public int getUserReservationsCount(int userId) {
+        String sql = "SELECT COUNT(*) FROM reservations WHERE user_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 }

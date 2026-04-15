@@ -1,6 +1,8 @@
 package controller;
 
+import dao.EventDAO;
 import dao.ReservationDAO;
+import model.Event;
 import model.User;
 
 import jakarta.servlet.ServletException;
@@ -13,10 +15,19 @@ import java.io.IOException;
 
 public class ReserveEventServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 1L;
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
         User user = (User) session.getAttribute("loggedInUser");
 
         if (user == null) {
@@ -24,29 +35,57 @@ public class ReserveEventServlet extends HttpServlet {
             return;
         }
 
-        int eventId = Integer.parseInt(request.getParameter("eventId"));
+        String eventIdParam = request.getParameter("eventId");
+
+        if (eventIdParam == null || eventIdParam.trim().isEmpty()) {
+            response.sendRedirect("view-events?error=invalid");
+            return;
+        }
+
+        int eventId;
+
+        try {
+            eventId = Integer.parseInt(eventIdParam);
+        } catch (NumberFormatException e) {
+            response.sendRedirect("view-events?error=invalid");
+            return;
+        }
 
         ReservationDAO reservationDAO = new ReservationDAO();
 
-     
-     if (reservationDAO.isAlreadyReserved(user.getId(), eventId)) {
-         response.sendRedirect("view-events?error=already");
-         return;
-     }
+        // منع الحجز المكرر
+        if (reservationDAO.isAlreadyReserved(user.getId(), eventId)) {
+            response.sendRedirect("view-events?error=already");
+            return;
+        }
 
+        EventDAO eventDAO = new EventDAO();
+        Event event = eventDAO.getEventById(eventId);
 
-     boolean success = reservationDAO.createReservation(user.getId(), eventId);
+        // إذا الحدث غير موجود
+        if (event == null) {
+            response.sendRedirect("view-events?error=invalid");
+            return;
+        }
 
-     if (success) {
-         response.sendRedirect("view-events?success=1");
-     } else {
-         response.getWriter().println("Reservation failed.");
-     }
-     
+        // إذا الحدث مش مفتوح للحجز
+        if (!"OPEN".equals(event.getStatus())) {
+            response.sendRedirect("view-events?error=closed");
+            return;
+        }
+
+        // إذا المقاعد خلصت
+        if (event.getSeatsRemaining() <= 0) {
+            response.sendRedirect("view-events?error=full");
+            return;
+        }
+
+        boolean success = reservationDAO.createReservation(user.getId(), eventId);
+
         if (success) {
-        	response.sendRedirect("view-events?success=1");
+            response.sendRedirect("view-events?success=1");
         } else {
-            response.getWriter().println("Reservation failed.");
+            response.sendRedirect("view-events?error=fail");
         }
     }
 }

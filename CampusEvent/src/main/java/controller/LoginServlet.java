@@ -5,15 +5,13 @@ import model.User;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
 public class LoginServlet extends HttpServlet {
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -32,10 +30,19 @@ public class LoginServlet extends HttpServlet {
         User user = userDAO.loginUser(email, password);
 
         if (user != null) {
+
             HttpSession session = request.getSession();
             session.setAttribute("loggedInUser", user);
 
-            response.sendRedirect("index.jsp");
+            // 🔥 أهم تعديل
+            String role = user.getRole();
+
+            if (role.equalsIgnoreCase("admin")) {
+                response.sendRedirect("admin-dashboard");
+            } else {
+                response.sendRedirect("home"); // student
+            }
+
         } else {
             request.setAttribute("errorMessage", "Invalid email or password.");
             request.getRequestDispatcher("login.jsp").forward(request, response);

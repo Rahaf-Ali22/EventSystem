@@ -68,4 +68,14 @@
 </servlet-mapping>
 
 
+<servlet>
+    <servlet-name>RateEventServlet</servlet-name>
+    <servlet-class>controller.RateEventServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>RateEventServlet</servlet-name>
+    <url-pattern>/rate-event</url-pattern>
+</servlet-mapping>
+
 </web-app>
