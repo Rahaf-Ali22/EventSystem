@@ -19,7 +19,7 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f2f2f2, #f8c8dc);
+            background: linear-gradient(135deg, #f2f2f2, #64748b);
             color: #1A3263;
         }
 
@@ -34,7 +34,7 @@
         }
 
         .nav-logo {
-            color: #f8c8dc;
+            color: #64748b;
             text-decoration: none;
             font-size: 22px;
             font-weight: bold;
@@ -57,25 +57,25 @@
         }
 
         .nav-link:hover {
-            background-color: #f8c8dc;
+            background-color: #64748b;
             color: #1A3263;
-            box-shadow: 0 0 10px #f8c8dc,
-                        0 0 20px #f8c8dc;
+            box-shadow: 0 0 10px #64748b,
+                        0 0 20px #64748b;
         }
 
         .active-link {
-            background-color: #f8c8dc;
+            background-color: #64748b;
             color: #1A3263 !important;
-            box-shadow: 0 0 10px #f8c8dc,
-                        0 0 20px #f8c8dc;
+            box-shadow: 0 0 10px #64748b,
+                        0 0 20px #64748b;
         }
 
         .logout-link {
-            border: 1px solid #f8c8dc;
+            border: 1px solid #64748b;
         }
 
         .user-badge {
-            color: #f8c8dc;
+            color: #64748b;
             font-weight: bold;
             margin-right: 10px;
         }
@@ -131,7 +131,7 @@
         .btn {
             display: inline-block;
             text-decoration: none;
-            background-color: #ff4fa3;
+            background-color: #6b7280;
             color: white;
             padding: 12px 22px;
             margin: 10px;
@@ -144,8 +144,8 @@
 
         .btn:hover {
             background-color: #e63e91;
-            box-shadow: 0 0 10px #f8c8dc,
-                        0 0 20px #f8c8dc;
+            box-shadow: 0 0 10px #64748b,
+                        0 0 20px #64748b;
         }
 
         .btn-secondary {

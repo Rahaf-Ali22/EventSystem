@@ -20,25 +20,34 @@ public class AdminDashboardServlet extends HttpServlet {
         userDAO = new UserDAO();
         eventDAO = new EventDAO();
     }
+    
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // 🔒 1. Check session
         HttpSession session = request.getSession(false);
 
-        if (session == null || session.getAttribute("loggedInUser") == null) {
+        if (session == null) {
             response.sendRedirect("login.jsp");
             return;
         }
 
         User user = (User) session.getAttribute("loggedInUser");
 
+        if (user == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        // 🔒 2. Check role (Admin only)
         if (!"admin".equalsIgnoreCase(user.getRole())) {
             response.sendRedirect("home");
             return;
         }
 
+        // 📊 3. Get statistics
         int totalUsers = userDAO.getUsersCount();
         int blockedUsers = userDAO.getBlockedUsersCount();
         int totalEvents = eventDAO.getTotalEventsCount();
@@ -48,6 +57,8 @@ public class AdminDashboardServlet extends HttpServlet {
         request.setAttribute("blockedUsers", blockedUsers);
         request.setAttribute("totalEvents", totalEvents);
         request.setAttribute("openEvents", openEvents);
+
+        request.setAttribute("usersList", userDAO.getRecentUsers());
 
         request.getRequestDispatcher("admin-dashboard.jsp").forward(request, response);
     }

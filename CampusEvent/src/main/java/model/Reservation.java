@@ -8,7 +8,16 @@ public class Reservation {
     private int eventId;
     private Timestamp reservationDate;
     private String status;
+    private String attendance;
+    
+    public String getAttendance() {
+        return attendance;
+    }
 
+    public void setAttendance(String attendance) {
+        this.attendance = attendance;
+    }
+    
     public Reservation() {
     }
 

@@ -17,6 +17,9 @@ public class ViewEventsServlet extends HttpServlet {
             throws ServletException, IOException {
 
         EventDAO eventDAO = new EventDAO();
+
+        eventDAO.updateExpiredEvents();
+
         List<Event> events;
 
         String keyword = request.getParameter("keyword");
@@ -24,8 +27,10 @@ public class ViewEventsServlet extends HttpServlet {
 
         if (keyword != null && filterType != null && !keyword.trim().isEmpty()) {
             events = eventDAO.searchEvents(keyword, filterType);
+
         } else if ("availability".equals(filterType)) {
             events = eventDAO.searchEvents("", filterType);
+
         } else {
             events = eventDAO.getAllEvents();
         }

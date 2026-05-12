@@ -34,13 +34,14 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("loggedInUser", user);
 
-            // 🔥 أهم تعديل
             String role = user.getRole();
 
             if (role.equalsIgnoreCase("admin")) {
                 response.sendRedirect("admin-dashboard");
+            } else if (role.equalsIgnoreCase("organizer")) {
+                response.sendRedirect("organizer-dashboard");
             } else {
-                response.sendRedirect("home"); // student
+                response.sendRedirect("home");
             }
 
         } else {

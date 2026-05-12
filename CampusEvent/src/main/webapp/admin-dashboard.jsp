@@ -1,294 +1,229 @@
 <%@ page import="model.User" %>
+<%@ page import="java.util.List" %>
 <%
-    User user = (User) session.getAttribute("loggedInUser");
+    User admin = (User) session.getAttribute("loggedInUser");
 
-    if (user == null) {
+    if (admin == null || !"admin".equalsIgnoreCase(admin.getRole())) {
         response.sendRedirect("login.jsp");
         return;
     }
-
-    Integer totalUsers = (Integer) request.getAttribute("totalUsers");
-    Integer blockedUsers = (Integer) request.getAttribute("blockedUsers");
-    Integer totalEvents = (Integer) request.getAttribute("totalEvents");
-    Integer openEvents = (Integer) request.getAttribute("openEvents");
-
-    if (totalUsers == null) totalUsers = 0;
-    if (blockedUsers == null) blockedUsers = 0;
-    if (totalEvents == null) totalEvents = 0;
-    if (openEvents == null) openEvents = 0;
 %>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f2f2f2, #f8c8dc);
-            color: #1A3263;
-        }
+<style>
 
-        .navbar {
-            background: #1A3263;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-        }
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(135deg, #f2f2f2, #cbd5e1);
+}
 
-        .nav-logo {
-            color: #f8c8dc;
-            text-decoration: none;
-            font-size: 22px;
-            font-weight: bold;
-        }
+/* 🔥 NAVBAR الجديد */
+.navbar {
+    background: #1A3263;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
 
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            flex-wrap: wrap;
-        }
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 8px;
+    transition: 0.2s;
+}
 
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            padding: 8px 14px;
-            border-radius: 8px;
-            transition: 0.3s;
-        }
+/* Hover */
+.nav-link:hover {
+    background: #6b7280;
+}
 
-        .nav-link:hover {
-            background-color: #f8c8dc;
-            color: #1A3263;
-            box-shadow: 0 0 10px #f8c8dc, 0 0 20px #f8c8dc;
-        }
+/* Active */
+.nav-link.active {
+    background: #cbd5e1;
+    color: #1A3263;
+}
 
-        .active-link {
-            background-color: #f8c8dc;
-            color: #1A3263 !important;
-            box-shadow: 0 0 10px #f8c8dc, 0 0 20px #f8c8dc;
-        }
+/* Logout */
+.logout {
+    margin-left: auto;
+    border: 1px solid white;
+}
 
-        .logout-link {
-            border: 1px solid #f8c8dc;
-        }
+/* Container */
+.container {
+    width: 90%;
+    margin: 30px auto;
+}
 
-        .user-badge {
-            color: #f8c8dc;
-            font-weight: bold;
-            margin-right: 10px;
-        }
+/* Hero */
+.hero {
+    background: #1A3263;
+    color: white;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+}
 
-        .page-container {
-            width: 94%;
-            max-width: 1200px;
-            margin: 20px auto;
-        }
+/* Stats */
+.stats {
+    display: flex;
+    gap: 20px;
+    margin: 20px 0;
+}
 
-        .hero-section {
-            background: #1A3263;
-            color: white;
-            border-radius: 22px;
-            padding: 34px 28px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(0,0,0,0.12);
-            margin-bottom: 20px;
-        }
+.card {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
 
-        .hero-section h1 {
-            margin: 0 0 10px 0;
-            font-size: 38px;
-        }
+.number {
+    font-size: 26px;
+    font-weight: bold;
+    color: #6b7280;
+}
 
-        .hero-subtitle {
-            color: #f8c8dc;
-            font-size: 22px;
-            margin-bottom: 16px;
-        }
+/* Grid */
+.grid {
+    display: flex;
+    gap: 20px;
+}
 
-        .hero-text {
-            width: 82%;
-            margin: 0 auto 24px;
-            line-height: 1.7;
-            font-size: 17px;
-        }
+/* Boxes */
+.box {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+}
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-            margin-bottom: 20px;
-        }
+/* Items */
+.item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
 
-        .stat-card {
-            background: white;
-            border-radius: 18px;
-            padding: 22px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.08);
-            border: 1px solid #f8c8dc;
-            text-align: center;
-        }
+.item p {
+    margin: 5px 0;
+    font-size: 14px;
+}
 
-        .stat-card h3 {
-            margin: 0 0 10px 0;
-            color: #1A3263;
-            font-size: 20px;
-        }
+/* Actions */
+.actions a {
+    display: block;
+    margin-top: 10px;
+    color: #1A3263;
+    font-weight: bold;
+    text-decoration: none;
+}
 
-        .stat-number {
-            font-size: 34px;
-            font-weight: bold;
-            color: #ff4fa3;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-        }
-
-        .dashboard-card {
-            background: white;
-            border-radius: 18px;
-            padding: 24px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.08);
-            border: 1px solid #f8c8dc;
-            text-align: center;
-        }
-
-        .dashboard-card h2 {
-            margin-top: 0;
-            color: #1A3263;
-            font-size: 24px;
-        }
-
-        .dashboard-card p {
-            color: #555;
-            line-height: 1.6;
-            min-height: 60px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 22px;
-            background-color: #ff4fa3;
-            color: white;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #e63e91;
-            box-shadow: 0 0 10px #f8c8dc, 0 0 20px #f8c8dc;
-        }
-
-        @media (max-width: 900px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .cards-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-text {
-                width: 96%;
-            }
-
-            .hero-section h1 {
-                font-size: 32px;
-            }
-
-            .nav-right {
-                gap: 10px;
-                justify-content: flex-end;
-            }
-        }
-    </style>
+</style>
 </head>
 
 <body>
 
-<div class="navbar">
-    <div class="nav-left">
-        <a href="admin-dashboard" class="nav-logo">Campus Event System</a>
+<!-- 🔥 Navbar -->
+<jsp:include page="navbar.jsp" />
+
+<div class="container">
+
+    <!-- Hero -->
+    <div class="hero">
+        <h2>Welcome, <%= admin.getName() %></h2>
+        <p>Manage system users, events, and settings efficiently</p>
     </div>
 
-    <div class="nav-right">
-      
-        <a href="admin-dashboard" class="nav-link active-link">Dashboard</a>
-        <a href="admin-users" class="nav-link">Manage Users</a>
-        <a href="admin-events" class="nav-link">Manage Events</a>
-        <a href="admin-departments" class="nav-link">Departments</a>
-        <a href="admin-categories" class="nav-link">Categories</a>
-        <a href="logout" class="nav-link logout-link">Logout</a>
-    </div>
-</div>
+    <!-- Stats -->
+    <div class="stats">
 
-<div class="page-container">
-
-    <div class="hero-section">
-        <h1>Welcome, <%= user.getName() %></h1>
-        <div class="hero-subtitle">Admin Dashboard</div>
-        <div class="hero-text">
-            Monitor real system data, manage users, and control campus events through one centralized admin panel.
-        </div>
-    </div>
-
-    <div class="stats-grid">
-        <div class="stat-card">
+        <div class="card">
             <h3>Total Users</h3>
-            <div class="stat-number"><%= totalUsers %></div>
+            <div class="number"><%= request.getAttribute("totalUsers") %></div>
         </div>
 
-        <div class="stat-card">
+        <div class="card">
             <h3>Blocked Users</h3>
-            <div class="stat-number"><%= blockedUsers %></div>
+            <div class="number"><%= request.getAttribute("blockedUsers") %></div>
         </div>
 
-        <div class="stat-card">
+        <div class="card">
             <h3>Total Events</h3>
-            <div class="stat-number"><%= totalEvents %></div>
+            <div class="number"><%= request.getAttribute("totalEvents") %></div>
         </div>
 
-        <div class="stat-card">
+        <div class="card">
             <h3>Open Events</h3>
-            <div class="stat-number"><%= openEvents %></div>
+            <div class="number"><%= request.getAttribute("openEvents") %></div>
         </div>
+
     </div>
 
-    <div class="cards-grid">
-        <div class="dashboard-card">
-            <h2>Manage Users</h2>
-            <p>View all users, block or unblock accounts, and delete users when needed.</p>
-            <a href="admin-users" class="btn">Open Users Panel</a>
+    <!-- Grid -->
+    <div class="grid">
+
+        <!-- Recent Users -->
+        <div class="box">
+            <h3>Recent Users</h3>
+
+            <%
+            List<User> users = (List<User>) request.getAttribute("usersList");
+
+            if (users != null) {
+                for (User u : users) {
+            %>
+                <div class="item">
+
+                    <b><%= u.getName() %></b>
+
+                    <p>
+                        <%= u.getEmail() %><br>
+
+                        Role:
+                        <span style="color:
+                        <%= "admin".equalsIgnoreCase(u.getRole()) ? "red" :
+                            "organizer".equalsIgnoreCase(u.getRole()) ? "blue" : "green" %>;">
+                            <%= u.getRole() %>
+                        </span>
+                        <br>
+
+                        Joined: <%= u.getAdmissionYear() %>
+                    </p>
+
+                </div>
+            <%
+                }
+            } else {
+            %>
+                <p>No users data</p>
+            <%
+            }
+            %>
         </div>
 
-        <div class="dashboard-card">
-            <h2>Manage Events</h2>
-            <p>View all events, monitor their status, and delete any event from the admin panel.</p>
-            <a href="admin-events" class="btn">Open Events Panel</a>
+        <!-- Quick Actions -->
+        <div class="box">
+            <h3>Quick Actions</h3>
+
+            <div class="actions">
+                <a href="admin-users">Manage Users</a>
+                <a href="admin-events">Manage Events</a>
+                <a href="manage-departments">Departments</a>
+                <a href="manage-categories">Categories</a>
+            </div>
+
         </div>
 
-        <div class="dashboard-card">
-            <h2>System Summary</h2>
-            <p>
-                The system currently has <strong><%= totalUsers %></strong> user(s),
-                <strong><%= totalEvents %></strong> event(s),
-                and <strong><%= openEvents %></strong> open event(s).
-            </p>
-            <a href="logout" class="btn">Logout</a>
-        </div>
     </div>
 
 </div>

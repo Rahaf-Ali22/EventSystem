@@ -1,31 +1,24 @@
 <%@ page import="java.util.List" %>
-<%@ page import="model.Event" %>
-<%@ page import="model.User" %>
 <%@ page import="model.Department" %>
 <%@ page import="model.Category" %>
+<%@ page import="model.User" %>
 <%
-    User admin = (User) session.getAttribute("loggedInUser");
+    User organizer = (User) session.getAttribute("loggedInUser");
 
-    if (admin == null) {
+    if (organizer == null) {
         response.sendRedirect("login.jsp");
         return;
     }
 
-    Event event = (Event) request.getAttribute("event");
     List<Department> departments = (List<Department>) request.getAttribute("departmentsList");
     List<Category> categories = (List<Category>) request.getAttribute("categoriesList");
-
-    if (event == null) {
-        response.sendRedirect("admin-events");
-        return;
-    }
 %>
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Edit Event</title>
+    <title>Create Event</title>
 
     <style>
         body {
@@ -42,7 +35,6 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
         }
 
         .nav-logo {
@@ -65,26 +57,15 @@
             font-weight: bold;
             padding: 8px 14px;
             border-radius: 8px;
-            transition: 0.3s;
         }
 
-        .nav-link:hover {
-            background-color: #64748b;
-            color: #1A3263;
-        }
-
-        .active-link {
+        .nav-link:hover, .active-link {
             background-color: #64748b;
             color: #1A3263 !important;
         }
 
         .logout-link {
             border: 1px solid #64748b;
-        }
-
-        .user-badge {
-            color: #64748b;
-            font-weight: bold;
         }
 
         .container {
@@ -162,58 +143,40 @@
 </head>
 <body>
 
-<div class="navbar">
-    <div class="nav-left">
-        <a href="admin-dashboard" class="nav-logo">Campus Event System</a>
-    </div>
+<jsp:include page="organizer-navbar.jsp" />
 
-    <div class="nav-right">
-      
-        <a href="admin-dashboard" class="nav-link">Dashboard</a>
-        <a href="admin-users" class="nav-link">Manage Users</a>
-        <a href="admin-events" class="nav-link active-link">Manage Events</a>
-        <a href="admin-departments" class="nav-link">Departments</a>
-        <a href="admin-categories" class="nav-link">Categories</a>
-        <a href="logout" class="nav-link logout-link">Logout</a>
-    </div>
-</div>
 
 <div class="container">
-    <h1>Edit Event</h1>
+    <h1>Create Event</h1>
 
     <%
         String error = request.getParameter("error");
-        if ("seats".equals(error)) {
+        if ("fail".equals(error)) {
     %>
-        <p class="message">Seats remaining cannot be greater than capacity.</p>
+        <p class="message">Failed to create event.</p>
     <%
-        } else if ("fail".equals(error)) {
+        } else if ("invalid".equals(error)) {
     %>
-        <p class="message">Failed to update event.</p>
+        <p class="message">Invalid event data.</p>
     <%
         }
     %>
 
-    <form action="admin-edit-event" method="post">
-        <input type="hidden" name="id" value="<%= event.getId() %>">
-
+   <form action="create-event" method="post" enctype="multipart/form-data">
         <label>Title</label>
-        <input type="text" name="title" value="<%= event.getTitle() %>" required>
+        <input type="text" name="title" required>
 
         <label>Description</label>
-        <textarea name="description" required><%= event.getDescription() %></textarea>
+        <textarea name="description" required></textarea>
 
         <label>Event Date</label>
-        <input type="date" name="eventDate" value="<%= event.getEventDate() %>" required>
+        <input type="date" name="eventDate" required>
 
         <label>Location</label>
-        <input type="text" name="location" value="<%= event.getLocation() %>" required>
+        <input type="text" name="location" required>
 
         <label>Capacity</label>
-        <input type="number" name="capacity" value="<%= event.getCapacity() %>" min="1" required>
-
-        <label>Seats Remaining</label>
-        <input type="number" name="seatsRemaining" value="<%= event.getSeatsRemaining() %>" min="0" required>
+        <input type="number" name="capacity" min="1" required>
 
         <label>Department / Club</label>
         <select name="departmentClub" required>
@@ -221,26 +184,21 @@
                 if (departments != null && !departments.isEmpty()) {
                     for (Department department : departments) {
             %>
-                <option value="<%= department.getName() %>"
-                    <%= department.getName().equals(event.getDepartmentClub()) ? "selected" : "" %>>
-                    <%= department.getName() %>
-                </option>
+                <option value="<%= department.getName() %>"><%= department.getName() %></option>
             <%
                     }
                 }
             %>
+            
         </select>
 
         <label>Category</label>
         <select name="category" required>
             <%
                 if (categories != null && !categories.isEmpty()) {
-                    for (Category categoryObj : categories) {
+                    for (Category category : categories) {
             %>
-                <option value="<%= categoryObj.getName() %>"
-                    <%= categoryObj.getName().equals(event.getCategory()) ? "selected" : "" %>>
-                    <%= categoryObj.getName() %>
-                </option>
+                <option value="<%= category.getName() %>"><%= category.getName() %></option>
             <%
                     }
                 }
@@ -249,22 +207,17 @@
 
         <label>Event Type</label>
         <select name="eventType" required>
-            <option value="Workshop" <%= "Workshop".equals(event.getEventType()) ? "selected" : "" %>>Workshop</option>
-            <option value="Seminar" <%= "Seminar".equals(event.getEventType()) ? "selected" : "" %>>Seminar</option>
-            <option value="Club Social Event" <%= "Club Social Event".equals(event.getEventType()) ? "selected" : "" %>>Club Social Event</option>
-            <option value="Sports Activity" <%= "Sports Activity".equals(event.getEventType()) ? "selected" : "" %>>Sports Activity</option>
+            <option value="Workshop">Workshop</option>
+            <option value="Seminar">Seminar</option>
+            <option value="Club Social Event">Club Social Event</option>
+            <option value="Sports Activity">Sports Activity</option>
         </select>
-
-        <label>Status</label>
-        <select name="status" required>
-            <option value="OPEN" <%= "OPEN".equals(event.getStatus()) ? "selected" : "" %>>OPEN</option>
-            <option value="CLOSED" <%= "CLOSED".equals(event.getStatus()) ? "selected" : "" %>>CLOSED</option>
-            <option value="EXPIRED" <%= "EXPIRED".equals(event.getStatus()) ? "selected" : "" %>>EXPIRED</option>
-        </select>
+<label>Event Image:</label>
+<input type="file" name="image" accept="image/*"><br>
 
         <div class="buttons">
-            <button type="submit" class="btn btn-save">Save Changes</button>
-            <a href="admin-events" class="btn btn-back">Back</a>
+            <button type="submit" class="btn btn-save">Create Event</button>
+            <a href="organizer-dashboard" class="btn btn-back">Back</a>
         </div>
     </form>
 </div>

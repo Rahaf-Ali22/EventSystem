@@ -10,7 +10,7 @@ import model.User;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/admin-departments")
+@WebServlet("/manage-departments")
 public class AdminDepartmentsServlet extends HttpServlet {
 
     private DepartmentDAO departmentDAO;

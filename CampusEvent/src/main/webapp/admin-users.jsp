@@ -21,7 +21,7 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f2f2f2, #f8c8dc);
+            background: linear-gradient(135deg, #f2f2f2, #64748b);
             color: #1A3263;
         }
 
@@ -36,7 +36,7 @@
         }
 
         .nav-logo {
-            color: #f8c8dc;
+            color: #64748b;
             text-decoration: none;
             font-size: 22px;
             font-weight: bold;
@@ -59,27 +59,27 @@
         }
 
         .nav-link:hover {
-            background-color: #f8c8dc;
+            background-color: #64748b;
             color: #1A3263;
         }
 
         .active-link {
-            background-color: #f8c8dc;
+            background-color: #64748b;
             color: #1A3263 !important;
         }
 
         .logout-link {
-            border: 1px solid #f8c8dc;
+            border: 1px solid #64748b;
         }
 
         .user-badge {
-            color: #f8c8dc;
+            color: #64748b;
             font-weight: bold;
         }
 
         .page-container {
             width: 95%;
-            max-width: 1300px;
+            max-width: 1350px;
             margin: 25px auto;
         }
 
@@ -117,7 +117,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1000px;
+            min-width: 1150px;
         }
 
         th, td {
@@ -157,6 +157,14 @@
             background: #e53935;
         }
 
+        .btn-role {
+            background: #1e88e5;
+        }
+
+        .btn-student {
+            background: #8e24aa;
+        }
+
         .status-blocked {
             color: red;
             font-weight: bold;
@@ -166,81 +174,86 @@
             color: green;
             font-weight: bold;
         }
+
+        .role-organizer {
+            color: #1e88e5;
+            font-weight: bold;
+        }
+
+        .role-student {
+            color: #333;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-<div class="navbar">
-    <div class="nav-left">
-        <a href="admin-dashboard" class="nav-logo">Campus Event System</a>
-    </div>
-
-   <div class="nav-right">
-      
-        <a href="admin-dashboard" class="nav-link">Dashboard</a>
-        <a href="admin-users" class="nav-link active-link">Manage Users</a>
-        <a href="admin-events" class="nav-link">Manage Events</a>
-        <a href="admin-departments" class="nav-link">Departments</a>
-        <a href="admin-categories" class="nav-link">Categories</a>
-        <a href="logout" class="nav-link logout-link">Logout</a>
-    </div>
-</div>
+<jsp:include page="navbar.jsp" />
 
 <div class="page-container">
 
     <div class="header-box">
         <h1>Manage Users</h1>
-        <p>View all users and control their accounts.</p>
+        <p>View all users, control accounts, and assign organizer role.</p>
     </div>
 
-  <%
-    String success = request.getParameter("success");
-    String error = request.getParameter("error");
+    <%
+        String success = request.getParameter("success");
+        String error = request.getParameter("error");
 
-    if ("blocked".equals(success)) {
-%>
-    <p class="message success">User blocked successfully.</p>
-<%
-    } else if ("unblocked".equals(success)) {
-%>
-    <p class="message success">User unblocked successfully.</p>
-<%
-    } else if ("deleted".equals(success)) {
-%>
-    <p class="message success">User deleted successfully.</p>
-<%
-    }
+        if ("blocked".equals(success)) {
+    %>
+        <p class="message success">User blocked successfully.</p>
+    <%
+        } else if ("unblocked".equals(success)) {
+    %>
+        <p class="message success">User unblocked successfully.</p>
+    <%
+        } else if ("deleted".equals(success)) {
+    %>
+        <p class="message success">User deleted successfully.</p>
+    <%
+        } else if ("organizer".equals(success)) {
+    %>
+        <p class="message success">User role updated to organizer successfully.</p>
+    <%
+        } else if ("student".equals(success)) {
+    %>
+        <p class="message success">User role updated to student successfully.</p>
+    <%
+        }
 
-    if ("fail".equals(error)) {
-%>
-    <p class="message error">Operation failed.</p>
-<%
-    } else if ("invalid".equals(error)) {
-%>
-    <p class="message error">Invalid request.</p>
-<%
-    } else if ("self".equals(error)) {
-%>
-    <p class="message error">You cannot block, unblock, or delete your own admin account.</p>
-<%
-    } else if ("hasReservations".equals(error)) {
-%>
-    <p class="message error">You cannot delete this user because they have reservations.</p>
-<%
-    } else if ("hasEvents".equals(error)) {
-%>
-    <p class="message error">You cannot delete this user because they are linked to existing events.</p>
-<%
-    } else if ("admin".equals(error)) {
-%>
-    <p class="message error">Admin accounts cannot be managed from this panel.</p>
-<%
-    } else if ("notfound".equals(error)) {
-%>
-    <p class="message error">User not found.</p>
-<%
-    }
-%>
+        if ("fail".equals(error)) {
+    %>
+        <p class="message error">Operation failed.</p>
+    <%
+        } else if ("invalid".equals(error)) {
+    %>
+        <p class="message error">Invalid request.</p>
+    <%
+        } else if ("self".equals(error)) {
+    %>
+        <p class="message error">You cannot block, unblock, or delete your own admin account.</p>
+    <%
+        } else if ("hasReservations".equals(error)) {
+    %>
+        <p class="message error">You cannot delete this user because they have reservations.</p>
+    <%
+        } else if ("hasEvents".equals(error)) {
+    %>
+        <p class="message error">You cannot delete this user because they are linked to existing events.</p>
+    <%
+        } else if ("admin".equals(error)) {
+    %>
+        <p class="message error">Admin accounts cannot be managed from this panel.</p>
+    <%
+        } else if ("notfound".equals(error)) {
+    %>
+        <p class="message error">User not found.</p>
+    <%
+        }
+    %>
+
     <div class="table-box">
         <table>
             <tr>
@@ -266,7 +279,13 @@
                 <td><%= user.getFaculty() %></td>
                 <td><%= user.getDepartment() %></td>
                 <td><%= user.getAdmissionYear() %></td>
-                <td><%= user.getRole() %></td>
+                <td>
+                    <% if ("organizer".equalsIgnoreCase(user.getRole())) { %>
+                        <span class="role-organizer">Organizer</span>
+                    <% } else { %>
+                        <span class="role-student">Student</span>
+                    <% } %>
+                </td>
                 <td>
                     <% if (user.isBlocked()) { %>
                         <span class="status-blocked">Blocked</span>
@@ -281,8 +300,17 @@
                         <a class="btn btn-block" href="admin-users?action=block&id=<%= user.getId() %>">Block</a>
                     <% } %>
 
-                    <a class="btn btn-delete" href="admin-users?action=delete&id=<%= user.getId() %>"
-                       onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                    <% if ("organizer".equalsIgnoreCase(user.getRole())) { %>
+                        <a class="btn btn-student" href="admin-users?action=makeStudent&id=<%= user.getId() %>">Make Student</a>
+                    <% } else { %>
+                        <a class="btn btn-role" href="admin-users?action=makeOrganizer&id=<%= user.getId() %>">Make Organizer</a>
+                    <% } %>
+
+                    <a class="btn btn-delete"
+                       href="admin-users?action=delete&id=<%= user.getId() %>"
+                       onclick="return confirm('Are you sure you want to delete this user?');">
+                       Delete
+                    </a>
                 </td>
             </tr>
             <%

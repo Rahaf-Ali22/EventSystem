@@ -10,7 +10,7 @@ import model.User;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/admin-categories")
+@WebServlet("/manage-categories")
 public class AdminCategoriesServlet extends HttpServlet {
 
     private CategoryDAO categoryDAO;
@@ -57,7 +57,7 @@ public class AdminCategoriesServlet extends HttpServlet {
         List<Category> categories = categoryDAO.getAllCategories();
         request.setAttribute("categoriesList", categories);
         request.getRequestDispatcher("admin-categories.jsp").forward(request, response);
-    }
+        }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

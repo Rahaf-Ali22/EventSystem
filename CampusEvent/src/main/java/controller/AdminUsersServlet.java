@@ -39,7 +39,6 @@ public class AdminUsersServlet extends HttpServlet {
 
         User loggedInUser = (User) session.getAttribute("loggedInUser");
 
-        // فقط الأدمن يدخل
         if (!"admin".equalsIgnoreCase(loggedInUser.getRole())) {
             response.sendRedirect("home");
             return;
@@ -52,13 +51,11 @@ public class AdminUsersServlet extends HttpServlet {
             try {
                 int userId = Integer.parseInt(idParam);
 
-                // منع الأدمن من تعديل نفسه
                 if (userId == loggedInUser.getId()) {
                     response.sendRedirect("admin-users?error=self");
                     return;
                 }
 
-                // نجيب المستخدم المستهدف
                 User targetUser = userDAO.getUserById(userId);
 
                 if (targetUser == null) {
@@ -66,7 +63,6 @@ public class AdminUsersServlet extends HttpServlet {
                     return;
                 }
 
-                // منع أي تعامل مع admin آخر
                 if ("admin".equalsIgnoreCase(targetUser.getRole())) {
                     response.sendRedirect("admin-users?error=admin");
                     return;
@@ -98,6 +94,16 @@ public class AdminUsersServlet extends HttpServlet {
 
                     result = userDAO.deleteUser(userId);
                     response.sendRedirect("admin-users?" + (result ? "success=deleted" : "error=fail"));
+                    return;
+
+                } else if ("makeOrganizer".equalsIgnoreCase(action)) {
+                    result = userDAO.updateUserRole(userId, "organizer");
+                    response.sendRedirect("admin-users?" + (result ? "success=organizer" : "error=fail"));
+                    return;
+
+                } else if ("makeStudent".equalsIgnoreCase(action)) {
+                    result = userDAO.updateUserRole(userId, "student");
+                    response.sendRedirect("admin-users?" + (result ? "success=student" : "error=fail"));
                     return;
                 }
 

@@ -14,7 +14,7 @@
 
         body {
             font-family: Arial;
-            background: linear-gradient(135deg, #f2f2f2, #f8c8dc);
+            background: linear-gradient(135deg, #f2f2f2, #64748b);
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -93,13 +93,13 @@
         }
 
         .register-btn:hover {
-            background: #f8c8dc;
+            background: #64748b;
             color: #1A3263;
 
             box-shadow:
-                0 0 10px #f8c8dc,
-                0 0 20px #f8c8dc,
-                0 0 30px #f8c8dc;
+                0 0 10px #64748b,
+                0 0 20px #64748b,
+                0 0 30px #64748b;
         }
 
         .bottom-text {

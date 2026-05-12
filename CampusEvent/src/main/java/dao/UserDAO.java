@@ -6,6 +6,8 @@ import util.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
+import java.util.ArrayList;
 
 public class UserDAO {
 
@@ -65,7 +67,33 @@ public class UserDAO {
 
         return null;
     }
+    public List<User> getRecentUsers() {
+        List<User> users = new ArrayList<>();
 
+        String sql = "SELECT * FROM users ORDER BY id DESC LIMIT 5";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                User user = new User();
+
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setRole(rs.getString("role"));
+                user.setAdmissionYear(rs.getInt("admission_year"));
+
+                users.add(user);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return users;
+    }
     // Get User By ID
     public User getUserById(int id) {
         String sql = "SELECT * FROM users WHERE id = ?";
@@ -232,6 +260,25 @@ public class UserDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
+            return stmt.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    // Update User Role
+    public boolean updateUserRole(int id, String role) {
+        String sql = "UPDATE users SET role = ? WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, role);
+            stmt.setInt(2, id);
+
             return stmt.executeUpdate() > 0;
 
         } catch (Exception e) {

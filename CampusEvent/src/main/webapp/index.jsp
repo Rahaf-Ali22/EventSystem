@@ -31,7 +31,7 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f2f2f2, #f8c8dc);
+            background: linear-gradient(135deg, #f2f2f2, #64748b);
             color: #1A3263;
         }
 
@@ -46,7 +46,7 @@
         }
 
         .nav-logo {
-            color: #f8c8dc;
+            color: #64748b;
             text-decoration: none;
             font-size: 22px;
             font-weight: bold;
@@ -69,23 +69,23 @@
         }
 
         .nav-link:hover {
-            background-color: #f8c8dc;
+            background-color: #64748b;
             color: #1A3263;
-            box-shadow: 0 0 10px #f8c8dc, 0 0 20px #f8c8dc;
+            box-shadow: 0 0 10px #64748b, 0 0 20px #64748b;
         }
 
         .logout-link {
-            border: 1px solid #f8c8dc;
+            border: 1px solid #64748b;
         }
 
         .active-link {
-            background-color: #f8c8dc;
+            background-color: #64748b;
             color: #1A3263 !important;
-            box-shadow: 0 0 10px #f8c8dc, 0 0 20px #f8c8dc;
+            box-shadow: 0 0 10px #64748b, 0 0 20px #64748b;
         }
 
         .user-badge {
-            color: #f8c8dc;
+            color: #64748b;
             font-weight: bold;
             margin-right: 10px;
         }
@@ -112,7 +112,7 @@
         }
 
         .hero-subtitle {
-            color: #f8c8dc;
+            color: #64748b;
             font-size: 22px;
             margin-bottom: 16px;
         }
@@ -136,7 +136,7 @@
             padding: 13px 24px;
             background-color: transparent;
             color: white;
-            border: 2px solid #f8c8dc;
+            border: 2px solid #64748b;
             border-radius: 10px;
             text-decoration: none;
             font-weight: bold;
@@ -144,13 +144,13 @@
         }
 
         .btn:hover {
-            background-color: #f8c8dc;
+            background-color: #64748b;
             color: #1A3263;
-            box-shadow: 0 0 10px #f8c8dc, 0 0 20px #f8c8dc, 0 0 35px #f8c8dc;
+            box-shadow: 0 0 10px #64748b, 0 0 20px #64748b, 0 0 35px #64748b;
         }
 
         .btn.primary {
-            background: #f8c8dc;
+            background: #64748b;
             color: #1A3263;
         }
 
@@ -172,7 +172,7 @@
             padding: 22px;
             box-shadow: 0 0 15px rgba(0,0,0,0.08);
             text-align: center;
-            border: 1px solid #f8c8dc;
+            border: 1px solid #64748b;
         }
 
         .stat-card h3 {
@@ -184,7 +184,7 @@
         .stat-number {
             font-size: 34px;
             font-weight: bold;
-            color: #ff4fa3;
+            color: #6b7280;
         }
 
         .content-grid {
@@ -208,7 +208,7 @@
 
         .event-preview-card {
             background: #f9f3f6;
-            border: 1px solid #f8c8dc;
+            border: 1px solid #64748b;
             border-radius: 14px;
             padding: 16px;
             margin-bottom: 14px;
@@ -228,7 +228,7 @@
 
         .mini-card {
             background: #f9f3f6;
-            border: 1px solid #f8c8dc;
+            border: 1px solid #64748b;
             border-radius: 14px;
             padding: 16px;
             margin-bottom: 12px;
@@ -256,7 +256,7 @@
         }
 
         .tip-box strong {
-            color: #f8c8dc;
+            color: #64748b;
         }
 
         .empty-state {

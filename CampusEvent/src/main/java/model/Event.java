@@ -19,6 +19,17 @@ public class Event {
     private String category;
     private String eventType;
 
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+    
+    
     public Event() {
     }
 

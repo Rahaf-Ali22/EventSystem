@@ -25,7 +25,7 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f2f2f2, #f8c8dc);
+            background: linear-gradient(135deg, #f2f2f2, #64748b);
             color: #1A3263;
         }
 
@@ -41,7 +41,7 @@
         }
 
         .nav-logo {
-            color: #f8c8dc;
+            color: #64748b;
             text-decoration: none;
             font-size: 22px;
             font-weight: bold;
@@ -64,27 +64,27 @@
         }
 
         .nav-link:hover {
-            background-color: #f8c8dc;
+            background-color: #64748b;
             color: #1A3263;
-            box-shadow: 0 0 10px #f8c8dc,
-                        0 0 20px #f8c8dc;
+            box-shadow: 0 0 10px #64748b,
+                        0 0 20px #64748b;
         }
 
         .active-link {
-            background-color: #f8c8dc;
+            background-color: #64748b;
             color: #1A3263 !important;
-            box-shadow: 0 0 10px #f8c8dc,
-                        0 0 20px #f8c8dc;
+            box-shadow: 0 0 10px #64748b,
+                        0 0 20px #64748b;
         }
 
         .user-badge {
-            color: #f8c8dc;
+            color: #64748b;
             font-weight: bold;
             margin-right: 10px;
         }
 
         .logout-link {
-            border: 1px solid #f8c8dc;
+            border: 1px solid #64748b;
         }
 
         .page-container {
@@ -130,7 +130,7 @@
         }
 
         .event-card h3 {
-            color: #f8c8dc;
+            color: #64748b;
             margin-top: 0;
         }
 
@@ -142,7 +142,7 @@
             display: inline-block;
             margin-top: 12px;
             padding: 12px 20px;
-            border: 2px solid #f8c8dc;
+            border: 2px solid #64748b;
             color: white;
             border-radius: 8px;
             text-decoration: none;
@@ -153,7 +153,7 @@
         }
 
         .btn:hover {
-            background-color: #f8c8dc;
+            background-color: #64748b;
             color: #1A3263;
         }
 
@@ -176,7 +176,7 @@
         .search-form select {
             padding: 10px;
             border-radius: 8px;
-            border: 2px solid #f8c8dc;
+            border: 2px solid #64748b;
             min-width: 220px;
         }
 
@@ -184,7 +184,7 @@
             margin-top: 12px;
             padding: 10px;
             border-radius: 8px;
-            border: 2px solid #f8c8dc;
+            border: 2px solid #64748b;
         }
     </style>
 </head>
@@ -292,14 +292,17 @@
                     String status = event.getStatus();
             %>
                 <div class="event-card">
-                    <h3><%= event.getTitle() %></h3>
-                    <p><strong>Description:</strong> <%= event.getDescription() %></p>
-                    <p><strong>Date:</strong> <%= event.getEventDate() %></p>
-                    <p><strong>Location:</strong> <%= event.getLocation() %></p>
-                    <p><strong>Seats Remaining:</strong> <%= event.getSeatsRemaining() %></p>
-                    <p><strong>Department / Club:</strong> <%= event.getDepartmentClub() %></p>
-                    <p><strong>Category:</strong> <%= event.getCategory() %></p>
-                    <p><strong>Event Type:</strong> <%= event.getEventType() %></p>
+    <h3><%= event.getTitle() %></h3>
+
+<img src="<%= request.getContextPath() %>/uploads/<%= event.getImage() %>" 
+     width="120"
+     style="border-radius:10px;">    <p><strong>Description:</strong> <%= event.getDescription() %></p>
+    <p><strong>Date:</strong> <%= event.getEventDate() %></p>
+    <p><strong>Location:</strong> <%= event.getLocation() %></p>
+    <p><strong>Seats Remaining:</strong> <%= event.getSeatsRemaining() %></p>
+    <p><strong>Department / Club:</strong> <%= event.getDepartmentClub() %></p>
+    <p><strong>Category:</strong> <%= event.getCategory() %></p>
+    <p><strong>Event Type:</strong> <%= event.getEventType() %></p>
 
                     <form action="rate-event" method="post">
                         <input type="hidden" name="eventId" value="<%= event.getId() %>">

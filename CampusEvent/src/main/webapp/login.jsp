@@ -10,7 +10,7 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f2f2f2, #f8c8dc);
+            background: linear-gradient(135deg, #f2f2f2, #64748b);
             color: #1A3263;
         }
 
@@ -41,7 +41,7 @@
             width: 100%;
             padding: 12px;
             margin-bottom: 18px;
-            border: 2px solid #f8c8dc;
+            border: 2px solid #64748b;
             border-radius: 8px;
             box-sizing: border-box;
             outline: none;
@@ -49,7 +49,7 @@
 
         input[type="email"]:focus,
         input[type="password"]:focus {
-            box-shadow: 0 0 8px #f8c8dc;
+            box-shadow: 0 0 8px #64748b;
         }
 
         .btn {
@@ -57,7 +57,7 @@
             padding: 12px;
             background-color: transparent;
             color: white;
-            border: 2px solid #f8c8dc;
+            border: 2px solid #64748b;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
@@ -65,11 +65,11 @@
         }
 
         .btn:hover {
-            background-color: #f8c8dc;
+            background-color: #64748b;
             color: #1A3263;
-            box-shadow: 0 0 10px #f8c8dc,
-                        0 0 20px #f8c8dc,
-                        0 0 40px #f8c8dc;
+            box-shadow: 0 0 10px #64748b,
+                        0 0 20px #64748b,
+                        0 0 40px #64748b;
         }
 
         .error-message {
@@ -85,7 +85,7 @@
         }
 
         .register-link a {
-            color: #f8c8dc;
+            color: #64748b;
             text-decoration: none;
             font-weight: bold;
         }

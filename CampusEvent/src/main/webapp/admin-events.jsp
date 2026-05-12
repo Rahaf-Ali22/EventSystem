@@ -22,7 +22,7 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f2f2f2, #f8c8dc);
+            background: linear-gradient(135deg, #f2f2f2, #64748b);
             color: #1A3263;
         }
 
@@ -37,7 +37,7 @@
         }
 
         .nav-logo {
-            color: #f8c8dc;
+            color: #64748b;
             text-decoration: none;
             font-size: 22px;
             font-weight: bold;
@@ -60,21 +60,21 @@
         }
 
         .nav-link:hover {
-            background-color: #f8c8dc;
+            background-color: #64748b;
             color: #1A3263;
         }
 
         .active-link {
-            background-color: #f8c8dc;
+            background-color: #64748b;
             color: #1A3263 !important;
         }
 
         .logout-link {
-            border: 1px solid #f8c8dc;
+            border: 1px solid #64748b;
         }
 
         .user-badge {
-            color: #f8c8dc;
+            color: #64748b;
             font-weight: bold;
         }
 
@@ -168,21 +168,7 @@
 </head>
 <body>
 
-<div class="navbar">
-    <div class="nav-left">
-        <a href="admin-dashboard" class="nav-logo">Campus Event System</a>
-    </div>
-
-    <div class="nav-right">
-      
-        <a href="admin-dashboard" class="nav-link">Dashboard</a>
-        <a href="admin-users" class="nav-link">Manage Users</a>
-        <a href="admin-events" class="nav-link active-link">Manage Events</a>  
-        <a href="admin-departments" class="nav-link">Departments</a>
-<a href="admin-categories" class="nav-link">Categories</a>
-<a href="logout" class="nav-link logout-link">Logout</a>
-    </div>
-</div>
+<jsp:include page="navbar.jsp" />
 
 <div class="page-container">
 
