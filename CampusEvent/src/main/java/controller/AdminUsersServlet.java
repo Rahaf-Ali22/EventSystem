@@ -12,7 +12,7 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/admin-users")
+
 public class AdminUsersServlet extends HttpServlet {
 
     private UserDAO userDAO;

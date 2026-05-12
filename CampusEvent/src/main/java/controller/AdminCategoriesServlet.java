@@ -10,7 +10,7 @@ import model.User;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/manage-categories")
+
 public class AdminCategoriesServlet extends HttpServlet {
 
     private CategoryDAO categoryDAO;

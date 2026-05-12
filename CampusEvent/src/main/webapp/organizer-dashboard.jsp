@@ -160,7 +160,7 @@ if (myEvents != null && !myEvents.isEmpty()) {
 <img src="<%= request.getContextPath() %>/uploads/<%= e.getImage() %>" 
      width="120"
      style="border-radius:10px;"> 
-
+<br>
 Location: <%= e.getLocation() %><br>
 
 Status:

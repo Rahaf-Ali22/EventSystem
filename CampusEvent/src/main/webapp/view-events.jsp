@@ -294,9 +294,12 @@
                 <div class="event-card">
     <h3><%= event.getTitle() %></h3>
 
-<img src="<%= request.getContextPath() %>/uploads/<%= event.getImage() %>" 
-     width="120"
-     style="border-radius:10px;">    <p><strong>Description:</strong> <%= event.getDescription() %></p>
+<% if (event.getImage() != null && !event.getImage().isEmpty()) { %>
+    <img src="<%= request.getContextPath() %>/uploads/<%= event.getImage() %>" 
+         width="120"
+         style="border-radius:10px; margin-bottom:10px;">
+<% } %>
+    <p><strong>Description:</strong> <%= event.getDescription() %></p>
     <p><strong>Date:</strong> <%= event.getEventDate() %></p>
     <p><strong>Location:</strong> <%= event.getLocation() %></p>
     <p><strong>Seats Remaining:</strong> <%= event.getSeatsRemaining() %></p>

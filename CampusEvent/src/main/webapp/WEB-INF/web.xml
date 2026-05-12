@@ -19,7 +19,6 @@
     <servlet-class>controller.LogoutServlet</servlet-class>
 </servlet>
 
-
 <servlet-mapping>
     <servlet-name>LogoutServlet</servlet-name>
     <url-pattern>/logout</url-pattern>
@@ -45,7 +44,6 @@
     <url-pattern>/reserve</url-pattern>
 </servlet-mapping>
 
-
 <servlet>
     <servlet-name>MyReservationsServlet</servlet-name>
     <servlet-class>controller.MyReservationsServlet</servlet-class>
@@ -55,7 +53,6 @@
     <servlet-name>MyReservationsServlet</servlet-name>
     <url-pattern>/my-reservations</url-pattern>
 </servlet-mapping>
-
 
 <servlet>
     <servlet-name>CancelReservationServlet</servlet-name>
@@ -67,7 +64,6 @@
     <url-pattern>/cancel-reservation</url-pattern>
 </servlet-mapping>
 
-
 <servlet>
     <servlet-name>RateEventServlet</servlet-name>
     <servlet-class>controller.RateEventServlet</servlet-class>
@@ -78,4 +74,47 @@
     <url-pattern>/rate-event</url-pattern>
 </servlet-mapping>
 
+
+<servlet>
+    <servlet-name>AdminUsersServlet</servlet-name>
+    <servlet-class>controller.AdminUsersServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>AdminUsersServlet</servlet-name>
+    <url-pattern>/admin-users</url-pattern>
+</servlet-mapping>
+
+
+
+
+
+<servlet>
+    <servlet-name>AdminDepartmentsServlet</servlet-name>
+    <servlet-class>controller.AdminDepartmentsServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>AdminDepartmentsServlet</servlet-name>
+    <url-pattern>/manage-departments</url-pattern>
+</servlet-mapping>
+
+
+<servlet>
+    <servlet-name>AdminCategoriesServlet</servlet-name>
+    <servlet-class>controller.AdminCategoriesServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>AdminCategoriesServlet</servlet-name>
+    <url-pattern>/manage-categories</url-pattern>
+</servlet-mapping>
+
+
+<servlet-mapping>
+    <servlet-name>AdminDepartmentsServlet</servlet-name>
+    <url-pattern>/admin-departments</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>AdminCategoriesServlet</servlet-name>
+    <url-pattern>/admin-categories</url-pattern>
+</servlet-mapping>
 </web-app>

@@ -386,7 +386,7 @@ public class EventDAO {
         event.setDepartmentClub(rs.getString("department_club"));
         event.setCategory(rs.getString("category"));
         event.setEventType(rs.getString("event_type"));
-
+        event.setImage(rs.getString("image"));
         return event;
     }
  // Organizer: delete own event

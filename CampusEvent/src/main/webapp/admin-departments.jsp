@@ -193,7 +193,7 @@
     %>
 
     <div class="form-box">
-        <form action="admin-departments" method="post">
+       <form action="manage-departments" method="post">
             <input type="text" name="name" placeholder="Enter department name" required>
             <button type="submit" class="btn btn-add">Add Department</button>
         </form>

@@ -193,7 +193,7 @@
     %>
 
     <div class="form-box">
-        <form action="admin-categories" method="post">
+       <form action="manage-categories" method="post">
             <input type="text" name="name" placeholder="Enter category name" required>
             <button type="submit" class="btn btn-add">Add Category</button>
         </form>
